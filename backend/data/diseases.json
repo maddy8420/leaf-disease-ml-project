@@ -1,0 +1,222 @@
+[
+  {
+    "name": "Tomato___Early_blight",
+    "cause": "Fungal infection caused by Alternaria solani, common in warm and humid conditions.",
+    "treatment": {
+      "en": {
+        "medicine": "Mancozeb",
+        "dosage": "2 g per liter",
+        "frequency": "Once every 7 days"
+      },
+      "kn": {
+        "name": "ಮೊದಲಿನ ಬ್ಲೈಟ್",
+        "medicine": "ಮ್ಯಾಂಕೋಜೆಬ್",
+        "dosage": "2 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್ ನೀರಿಗೆ",
+        "frequency": "ಪ್ರತಿ 7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Prune lower leaves to prevent spores from splashing up from the soil.",
+      "Rotate crops every 2-3 years to avoid soil-borne fungus buildup.",
+      "Target older leaves first as they are most susceptible."
+    ]
+  },
+  {
+    "name": "Tomato___Late_blight",
+    "cause": "Caused by Phytophthora infestans, spreads rapidly in cool and wet conditions.",
+    "treatment": {
+      "en": {
+        "medicine": "Metalaxyl + Mancozeb",
+        "dosage": "2.5 g per liter",
+        "frequency": "Once every 5–7 days"
+      },
+      "kn": {
+        "name": "ಕೊನೆಯ ಬ್ಲೈಟ್",
+        "medicine": "ಮೆಟಾಲಾಕ್ಸಿಲ್ + ಮ್ಯಾಂಕೋಜೆಬ್",
+        "dosage": "2.5 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್ ನೀರಿಗೆ",
+        "frequency": "ಪ್ರತಿ 5–7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Destroy all infected plant debris; do not compost it as the pathogen can survive.",
+      "Monitor weather; high humidity and temperatures between 15-20°C trigger rapid outbreaks.",
+      "Late blight can kill a whole field in days; early detection is critical."
+    ]
+  },
+  {
+    "name": "Tomato___Bacterial_spot",
+    "cause": "Bacterial infection caused by Xanthomonas species, spread through water splash and contaminated tools.",
+    "treatment": {
+      "en": {
+        "medicine": "Copper Oxychloride",
+        "dosage": "3 g per liter",
+        "frequency": "Once every 7 days"
+      },
+      "kn": {
+        "name": "ಬ್ಯಾಕ್ಟೀರಿಯಲ್ ಸ್ಪಾಟ್",
+        "medicine": "ಕಾಪರ್ ಆಕ್ಸಿಕ್ಲೋರೈಡ್",
+        "dosage": "3 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್",
+        "frequency": "ಪ್ರತಿ 7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Avoid overhead irrigation; water at the base of the plant.",
+      "Sanitize garden tools with alcohol or bleach after working with infected plants.",
+      "Bacteria can enter through tiny wounds or natural pores (stomata) in the leaves."
+    ]
+  },
+  {
+    "name": "Tomato___Spider_mites Two-spotted_spider_mite",
+    "cause": "Caused by spider mites that suck plant sap, common in hot and dry conditions.",
+    "treatment": {
+      "en": {
+        "medicine": "Neem Oil / Abamectin",
+        "dosage": "2 ml per liter",
+        "frequency": "Once every 5 days"
+      },
+      "kn": {
+        "name": "ಸ್ಪೈಡರ್ ಮೈಟ್ಸ್",
+        "medicine": "ನೀಮ್ ಎಣ್ಣೆ / ಅಬಾಮೆಕ್ಟಿನ್",
+        "dosage": "2 ಮಿ.ಲಿ. ಪ್ರತಿ ಲೀಟರ್",
+        "frequency": "ಪ್ರತಿ 5 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Check the undersides of leaves for fine silk webbing.",
+      "Increase humidity around plants; mites thrive in dusty, dry environments.",
+      "Natural predators like ladybugs can help control mite populations."
+    ]
+  },
+  {
+    "name": "Tomato___Tomato_Yellow_Leaf_Curl_Virus",
+    "cause": "Viral disease transmitted by whiteflies, causing leaf curling and yellowing.",
+    "treatment": {
+      "en": {
+        "medicine": "Imidacloprid",
+        "dosage": "0.5 ml per liter",
+        "frequency": "Once every 10 days"
+      },
+      "kn": {
+        "name": "ಹಳದಿ ಎಲೆ ಮುರುಕುವ ವೈರಸ್",
+        "medicine": "ಇಮಿಡಾಕ್ಲೋಪ್ರಿಡ್",
+        "dosage": "0.5 ಮಿ.ಲಿ. ಪ್ರತಿ ಲೀಟರ್",
+        "frequency": "ಪ್ರತಿ 10 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Focus on whitefly control; the virus cannot be cured once the plant is infected.",
+      "Use yellow sticky traps to monitor and catch whiteflies.",
+      "Remove weeds around the garden, as they often host the virus and the flies."
+    ]
+  },
+  {
+    "name": "Tomato___Leaf_Mold",
+    "cause": "Fungal disease caused by high humidity and poor air circulation.",
+    "treatment": {
+      "en": {
+        "medicine": "Chlorothalonil / Mancozeb",
+        "dosage": "2 g per liter",
+        "frequency": "Once every 7 days"
+      },
+      "kn": {
+        "name": "ಟೊಮೇಟೊ ಎಲೆ ಮೋಲ್ಡ್",
+        "medicine": "ಕ್ಲೋರೊಥಾಲೊನಿಲ್ / ಮ್ಯಾಂಕೋಜೆಬ್",
+        "dosage": "2 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್ ನೀರಿಗೆ",
+        "frequency": "ಪ್ರತಿ 7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Common in greenhouses; ensure fans and vents are used for air movement.",
+      "The fungus appears as pale green spots on top and olive-colored mold underneath.",
+      "Keep relative humidity below 85% to stop the fungus from spreading."
+    ]
+  },
+  {
+    "name": "Tomato___Septoria_leaf_spot",
+    "cause": "Fungal infection caused by Septoria lycopersici, spreads through water splash.",
+    "treatment": {
+      "en": {
+        "medicine": "Mancozeb / Chlorothalonil",
+        "dosage": "2 g per liter",
+        "frequency": "Once every 7 days"
+      },
+      "kn": {
+        "name": "ಸೆಪ್ಟೋರಿಯಾ ಎಲೆ ಚುಕ್ಕೆ ರೋಗ",
+        "medicine": "ಮ್ಯಾಂಕೋಜೆಬ್ / ಕ್ಲೋರೊಥಾಲೊನಿಲ್",
+        "dosage": "2 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್ ನೀರಿಗೆ",
+        "frequency": "ಪ್ರತಿ 7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Does not usually affect the fruit, but leaf loss can lead to sunscald on tomatoes.",
+      "Use mulch (straw or plastic) to create a barrier between the soil and the leaves.",
+      "Wash hands after handling infected plants to prevent spreading spores."
+    ]
+  },
+  {
+    "name": "Tomato___Target_Spot",
+    "cause": "Fungal disease causing circular target-like spots, common in humid environments.",
+    "treatment": {
+      "en": {
+        "medicine": "Chlorothalonil / Mancozeb",
+        "dosage": "2 g per liter",
+        "frequency": "Once every 7 days"
+      },
+      "kn": {
+        "name": "ಟಾರ್ಗೆಟ್ ಸ್ಪಾಟ್ ರೋಗ",
+        "medicine": "ಕ್ಲೋರೊಥಾಲೊನಿಲ್ / ಮ್ಯಾಂಕೋಜೆಬ್",
+        "dosage": "2 ಗ್ರಾಂ ಪ್ರತಿ ಲೀಟರ್ ನೀರಿಗೆ",
+        "frequency": "ಪ್ರತಿ 7 ದಿನಗಳಿಗೊಮ್ಮೆ"
+      }
+    },
+    "knowledge": [
+      "Look for concentric rings inside the leaf spots, resembling a bullseye.",
+      "Maintain adequate spacing between plants to allow leaves to dry quickly.",
+      "Pathogen can survive on old tomato stakes; disinfect equipment annually."
+    ]
+  },
+  {
+    "name": "Tomato___Tomato_mosaic_virus",
+    "cause": "Viral disease spread through contact, tools, and infected seeds.",
+    "treatment": {
+      "en": {
+        "medicine": "Remove infected plants (no chemical cure)",
+        "dosage": "—",
+        "frequency": "—"
+      },
+      "kn": {
+        "name": "ಟೊಮೇಟೊ ಮೋಸೈಕ್ ವೈರಸ್",
+        "medicine": "ರೋಗಗ್ರಸ್ತ ಗಿಡಗಳನ್ನು ತೆಗೆಯಿರಿ (ಔಷಧಿ ಇಲ್ಲ)",
+        "dosage": "—",
+        "frequency": "—"
+      }
+    },
+    "knowledge": [
+      "Smokers should wash hands before touching plants; the virus can exist in tobacco products.",
+      "Plant certified disease-free seeds or resistant varieties (labeled 'T').",
+      "Immediately rogue (pull out and burn) any plant showing mottled green patterns."
+    ]
+  },
+  {
+    "name": "Tomato___healthy",
+    "cause": "No disease detected. The plant is healthy.",
+    "treatment": {
+      "en": {
+        "medicine": "No treatment required",
+        "dosage": "—",
+        "frequency": "—"
+      },
+      "kn": {
+        "name": "ಆರೋಗ್ಯಕರ ಎಲೆ",
+        "medicine": "ಚಿಕಿತ್ಸೆ ಅಗತ್ಯವಿಲ್ಲ",
+        "dosage": "—",
+        "frequency": "—"
+      }
+    },
+    "knowledge": [
+      "Continue regular monitoring once a week for early signs of pests.",
+      "Maintain a consistent watering schedule to prevent blossom end rot.",
+      "Healthy soil organic matter boosts the plant's natural immunity."
+    ]
+  }
+]

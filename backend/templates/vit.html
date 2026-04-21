@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ViT Leaf Disease Detector</title>
+
+    <!-- Fix favicon 404 -->
+    <link rel="icon" href="data:,">
+
+</head>
+
+<body style="
+    font-family: Arial;
+    background-color: #f0fdf4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+">
+
+    <div style="
+        background: white;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        text-align: center;
+        width: 400px;
+    ">
+
+        <h2 style="color: #065f46;">🌿 Vision Transformer</h2>
+        <p style="color: #555;">Leaf Disease Detection</p>
+
+        <!-- Upload -->
+        <input type="file" id="imageInput" accept="image/*" onchange="previewImage()"><br><br>
+
+        <!-- Preview -->
+        <img id="preview" width="250" style="display:none; border-radius:10px;"><br><br>
+
+        <!-- Button -->
+        <button onclick="predict()" 
+            style="
+                padding:10px 20px;
+                background-color:#065f46;
+                color:white;
+                border:none;
+                border-radius:5px;
+                cursor:pointer;
+            ">
+            Predict
+        </button>
+
+        <br><br>
+
+        <!-- Loading -->
+        <p id="loading" style="display:none; color:#065f46;">⏳ Processing...</p>
+
+        <!-- Result -->
+        <div id="result" style="margin-top:20px; font-size:16px;"></div>
+
+    </div>
+
+    <script>
+
+        function previewImage() {
+            const file = document.getElementById("imageInput").files[0];
+
+            if (file) {
+                const preview = document.getElementById("preview");
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = "block";
+            }
+        }
+
+        function predict() {
+            const fileInput = document.getElementById("imageInput");
+            const file = fileInput.files[0];
+
+            if (!file) {
+                alert("Please select an image");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("image", file);
+
+            document.getElementById("loading").style.display = "block";
+            document.getElementById("result").innerHTML = "";
+
+            fetch("/api/predict-vit", {
+                method: "POST",
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none";
+
+                if (data.error) {
+                    document.getElementById("result").innerHTML =
+                        `<span style="color:red;">${data.error}</span>`;
+                    return;
+                }
+
+                document.getElementById("result").innerHTML = `
+                    <div style="color:#065f46;">
+                        <b>Model:</b> ${data.model} <br>
+                        <b>Disease:</b> ${data.disease} <br>
+                        <b>Confidence:</b> ${data.confidence}
+                    </div>
+                `;
+            })
+            .catch(() => {
+                document.getElementById("loading").style.display = "none";
+                document.getElementById("result").innerHTML =
+                    `<span style="color:red;">Error connecting to server</span>`;
+            });
+        }
+
+    </script>
+
+</body>
+</html>

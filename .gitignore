@@ -1,0 +1,28 @@
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Models (large files)
+backend/models/
+*.h5
+*.keras
+*.pkl
+
+# Dataset (large)
+*.csv
+dataset/
+
+# Outputs
+results/
+
+# Images (optional outputs)
+*.png
+*.jpg
+*.jpeg
+
+# OS files
+.DS_Store
+Thumbs.db

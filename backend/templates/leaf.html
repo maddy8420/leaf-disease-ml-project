@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Leaf Disease AI Diagnostic</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #10b981; /* Emerald Green */
+    --primary-glow: rgba(16, 185, 129, 0.5);
+    --dark: #064e3b;
+    --glass-bg: rgba(255, 255, 255, 0.92);
+    --glass-border: rgba(255, 255, 255, 0.6);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    min-height: 100vh;
+    min-width: 1200px;
+    background: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1920&auto=format&fit=crop') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #1f2937;
+  }
+
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6); /* Darker overlay for contrast */
+    z-index: 0;
+    backdrop-filter: blur(4px);
+  }
+
+  /* --- MAIN CONTAINER --- */
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 1200px;
+    height: 750px;
+    display: flex;
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 32px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+
+  .home-btn {
+    position: absolute; top: 30px; left: 30px;
+    background: white; padding: 10px 20px; border-radius: 12px;
+    font-weight: 700; text-decoration: none; color: #374151;
+    z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: 0.2s;
+  }
+  .home-btn:hover { transform: translateY(-2px); }
+
+  /* --- LEFT PANEL: SCANNER --- */
+  .left-panel {
+    flex: 6;
+    background: #ecfdf5;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid rgba(0,0,0,0.05);
+    overflow: hidden;
+  }
+
+  .upload-area {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .upload-area:hover #placeholder { transform: scale(1.05); }
+
+  #placeholder {
+    text-align: center; color: #6b7280; transition: 0.3s;
+  }
+  .icon-upload { font-size: 5rem; margin-bottom: 1rem; display: block; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1)); }
+
+  /* IMAGE & SCANNER LAYER */
+  .scan-container {
+    position: absolute; inset: 20px;
+    border-radius: 24px;
+    overflow: hidden;
+    background: #000;
+    display: none; /* Hidden until image selected */
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+  }
+
+  .preview-img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* --- THE NEW HEXAGON ANIMATION --- */
+  .scanner-overlay {
+    position: absolute; inset: 0; z-index: 5;
+    pointer-events: none;
+    display: none; /* Active during analysis */
+  }
+
+  /* 1. The Grid Pattern (SVG Background) */
+  .hex-grid {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L37.32 10V30L20 40L2.68 30V10L20 0Z' fill='none' stroke='%2310b981' stroke-opacity='0.2' stroke-width='1'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+
+  /* 2. The Laser Line */
+  .laser-beam {
+    position: absolute;
+    top: -10%; left: 0; width: 100%; height: 20%;
+    background: linear-gradient(to bottom, transparent, var(--primary), transparent);
+    opacity: 0.8;
+    filter: blur(2px);
+    box-shadow: 0 0 20px var(--primary-glow);
+  }
+
+  /* 3. The Active Grid (Lit up by laser) */
+  .hex-active {
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 0L37.32 10V30L20 40L2.68 30V10L20 0Z' fill='%2310b981' fill-opacity='0.15' stroke='%2310b981' stroke-width='2'/%3E%3C/svg%3E");
+    background-size: 40px 40px;
+    /* Mask the active grid to the laser position using mask-image */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 50%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 50%, transparent 100%);
+    -webkit-mask-size: 100% 20%;
+    mask-size: 100% 20%;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /* Animation Classes */
+  .scanning .scanner-overlay { display: block; }
+  .scanning .hex-grid { opacity: 1; }
+  
+  .scanning .laser-beam {
+    animation: scanMove 2.5s linear infinite;
+  }
+  
+  .scanning .hex-active {
+    animation: scanMask 2.5s linear infinite;
+  }
+
+  @keyframes scanMove {
+    0% { top: -20%; }
+    100% { top: 120%; }
+  }
+  @keyframes scanMask {
+    0% { -webkit-mask-position: 0 -20%; mask-position: 0 -20%; }
+    100% { -webkit-mask-position: 0 120%; mask-position: 0 120%; }
+  }
+
+  /* --- RIGHT PANEL: RESULTS --- */
+  .right-panel {
+    flex: 4;
+    padding: 40px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  h2 { margin: 0 0 10px 0; color: #065f46; font-size: 2rem; font-weight: 800; }
+  .subtitle { color: #6b7280; margin-bottom: 30px; }
+
+  .btn-upload {
+    background: var(--primary);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 18px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 10px 20px -5px var(--primary-glow);
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  .btn-upload:hover { background: #059669; transform: translateY(-2px); }
+  .btn-upload:disabled { background: #d1d5db; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Results Section */
+  #results { display: none; margin-top: 30px; animation: slideUp 0.5s ease-out; }
+
+  .diagnosis-card {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 20px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+
+  .disease-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #166534;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .confidence-tag {
+    background: white; border: 1px solid #16a34a;
+    color: #16a34a; padding: 4px 12px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+  }
+
+  .remedy-container {
+    display: flex; flex-direction: column; gap: 15px;
+  }
+  
+  .lang-box {
+    padding: 15px;
+    border-radius: 12px;
+    border-left: 4px solid #ddd;
+    background: #f9fafb;
+  }
+  .lang-box.en { border-color: #3b82f6; } /* Blue for English */
+  .lang-box.kn { border-color: #f59e0b; } /* Orange for Kannada */
+
+  .lang-label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: #9ca3af; margin-bottom: 5px; display: block;}
+
+  .gradcam-wrapper {
+    margin-top: 20px;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid #e5e7eb;
+  }
+  .gradcam-label {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.7); color: white;
+    text-align: center; font-size: 0.8rem; padding: 5px;
+  }
+
+  @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+
+<body>
+
+<a href="/" class="home-btn">← Dashboard</a>
+
+<div class="container" id="mainContainer">
+
+  <div class="left-panel">
+    <label class="upload-area">
+      
+      <div id="placeholder">
+        <span class="icon-upload">📸</span>
+        <div style="font-weight: 700; font-size: 1.2rem; margin-bottom: 5px;">Upload Leaf Image</div>
+        <div style="font-size: 0.9rem;">Supports JPG, PNG</div>
+      </div>
+
+      <div class="scan-container" id="scanContainer">
+        <img id="preview" class="preview-img">
+        
+        <div class="scanner-overlay">
+          <div class="hex-grid"></div>   <div class="hex-active"></div> <div class="laser-beam"></div> </div>
+      </div>
+
+      <input type="file" id="fileInput" accept="image/*" onchange="handleFile(this)" hidden>
+    </label>
+  </div>
+
+  <div class="right-panel">
+    <div>
+      <h2>Leaf Doctor AI</h2>
+      <p class="subtitle">Deep learning analysis for precise disease detection and treatment.</p>
+    </div>
+
+    <button id="predictBtn" class="btn-upload" onclick="runPrediction()">
+      <span id="btnIcon">🔍</span> <span id="btnText">Analyze Image</span>
+    </button>
+
+    <div id="results">
+      <div class="diagnosis-card">
+        <span class="disease-title" id="predLabel">--</span>
+        <span class="confidence-tag" id="predConf">--</span>
+      </div>
+<!-- 🔥 CHATBOT -->
+<div id="chatSection" style="margin-top:25px; display:none;">
+
+  <h3 style="color:#065f46;">Ask AI about this disease</h3>
+
+  <div id="chatBox" style="
+      background:#f9fafb;
+      border-radius:12px;
+      padding:15px;
+      height:200px;
+      overflow-y:auto;
+      margin-bottom:10px;
+      font-size:14px;
+  "></div>
+
+  <div style="display:flex; gap:10px;">
+    <input id="chatInput" type="text" placeholder="Ask something..."
+      style="flex:1; padding:10px; border-radius:10px; border:1px solid #ccc;">
+    
+    <button onclick="sendChat()" style="
+        background:#10b981;
+        color:white;
+        border:none;
+        padding:10px 15px;
+        border-radius:10px;
+        cursor:pointer;">
+      Send
+    </button>
+  </div>
+
+</div>
+      <div class="remedy-container">
+        
+        <div class="lang-box en">
+          <span class="lang-label">🇬🇧 English Prescription</span>
+          <div id="remedyEn"></div>
+        </div>
+
+        <div class="lang-box kn">
+          <span class="lang-label">🇮🇳 ಕನ್ನಡ ಪ್ರಿಸ್ಕ್ರಿಪ್ಷನ್</span>
+          <div id="remedyKn"></div>
+        </div>
+
+      </div>
+
+      <div id="barsContainer" class="gradcam-wrapper"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+
+let currentDisease = null;
+
+// ================= IMAGE HANDLING =================
+
+function handleFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById("preview");
+    img.src = e.target.result;
+
+    document.getElementById("scanContainer").style.display = "block";
+    document.getElementById("placeholder").style.display = "none";
+    document.getElementById("results").style.display = "none";
+
+    // 🔥 FULL RESET (FIXES YOUR ISSUE)
+    document.getElementById("chatSection").style.display = "none";
+    document.getElementById("chatBox").innerHTML = "";
+    document.getElementById("chatInput").value = "";
+    currentDisease = null;
+
+    document.getElementById("mainContainer").classList.remove("scanning");
+  };
+  reader.readAsDataURL(file);
+}
+
+// ================= PREDICTION =================
+
+function runPrediction() {
+  const file = document.getElementById("fileInput").files[0];
+  if (!file) return alert("Please upload an image first.");
+
+  const btn = document.getElementById("predictBtn");
+  const btnText = document.getElementById("btnText");
+  const container = document.getElementById("mainContainer");
+
+  // 🔥 extra safety reset
+  document.getElementById("chatBox").innerHTML = "";
+
+  btnText.innerText = "Scanning Leaf...";
+  btn.disabled = true;
+  container.classList.add("scanning");
+
+  const fd = new FormData();
+  fd.append("image", file);
+
+ fetch("http://127.0.0.1:5000/api/predict", {
+  method: "POST",
+  body: fd
+})
+.then(r => {
+  if (!r.ok) throw new Error("Server error");
+  return r.json();
+})
+.then(data => {
+  console.log("PREDICT RESPONSE:", data); // 🔥 DEBUG
+
+  setTimeout(() => {
+    displayResults(data);
+
+    container.classList.remove("scanning");
+    btnText.innerText = "Analyze Again";
+    btn.disabled = false;
+  }, 1500);
+})
+}
+
+// ================= DISPLAY RESULTS =================
+
+function displayResults(data) {
+
+  console.log("API RESPONSE:", data); // 🔥 DEBUG
+
+  // ✅ SAFE MAPPING (handles different backend formats)
+  const disease = data.disease_en || data.disease || data.prediction || "Unknown";
+  const confidence = data.confidence || 0;
+  const severity = data.severity || "N/A";
+
+  document.getElementById("predLabel").innerText = disease;
+  document.getElementById("predConf").innerText =
+    `Confidence: ${confidence}% | Severity: ${severity}`;
+
+  // ✅ SAFE TREATMENT
+  if (data.treatment_en) {
+    document.getElementById("remedyEn").innerHTML = `
+      <strong>Medicine:</strong> ${data.treatment_en.medicine}<br>
+      <strong>Dosage:</strong> ${data.treatment_en.dosage}<br>
+      <strong>Frequency:</strong> ${data.treatment_en.frequency}
+    `;
+  } else {
+    document.getElementById("remedyEn").innerHTML = "No treatment data available.";
+  }
+
+  if (data.treatment_kn) {
+    document.getElementById("remedyKn").innerHTML = `
+      <strong>ಔಷಧಿ:</strong> ${data.treatment_kn.medicine}<br>
+      <strong>ಪ್ರಮಾಣ:</strong> ${data.treatment_kn.dosage}<br>
+      <strong>ಅವಧಿ:</strong> ${data.treatment_kn.frequency}
+    `;
+  } else {
+    document.getElementById("remedyKn").innerHTML = "";
+  }
+
+  // ✅ SAFE IMAGE
+  if (data.gradcam_image_path) {
+    document.getElementById("barsContainer").innerHTML = `
+      <img src="/${data.gradcam_image_path}" style="width:100%; display:block;">
+      <div class="gradcam-label">AI Attention Heatmap</div>
+    `;
+  } else {
+    document.getElementById("barsContainer").innerHTML = "";
+  }
+
+  document.getElementById("results").style.display = "block";
+
+  // ✅ CHAT ENABLE
+  currentDisease = data.disease_raw || disease;
+
+  const chatBox = document.getElementById("chatBox");
+  chatBox.innerHTML = "<div style='color:#6b7280;'>💬 Ask about this detected disease...</div>";
+
+  document.getElementById("chatSection").style.display = "block";
+}
+// ================= CHATBOT =================
+function sendChat() {
+  const input = document.getElementById("chatInput");
+  const message = input.value.trim();
+
+  if (!message) return;
+
+  const chatBox = document.getElementById("chatBox");
+
+  // ✅ show user message
+  chatBox.innerHTML += `<div><b>You:</b> ${message}</div>`;
+  input.value = "";
+
+  fetch("http://127.0.0.1:5000/api/chat", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      message: message,
+      disease: currentDisease
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    const reply = data.response || "⚠️ No response from AI";
+
+    chatBox.innerHTML += `<div style="color:#065f46;"><b>AI:</b> ${reply}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+  })
+  .catch(() => {
+    chatBox.innerHTML += `<div style="color:red;">Error connecting to chatbot</div>`;
+  });
+}
+
+</script>
+</body>
+</html>

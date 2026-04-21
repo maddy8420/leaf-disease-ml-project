@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Agriculture AI</title>
+
+<style>
+  :root {
+    --leaf-grad: linear-gradient(135deg, #2ecc71, #27ae60);
+    --soil-grad: linear-gradient(135deg, #3498db, #2980b9);
+    --clim-grad: linear-gradient(135deg, #f1c40f, #d35400);
+    --glass-bg: rgba(255, 255, 255, 0.85);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
+    min-width: 1200px;
+    background: url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1920&auto=format&fit=crop') no-repeat center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+  }
+
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 1000px;
+    padding: 60px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border-radius: 30px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+    animation: fadeIn 1s ease-out;
+  }
+
+  h1 {
+    color: #1b5e20;
+    font-size: 3.5rem;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: #555;
+    font-size: 1.3rem;
+    margin-bottom: 60px;
+  }
+
+  .cards {
+    display: flex;
+    gap: 40px;
+  }
+
+  .card {
+    flex: 1;
+    height: 220px;
+    border-radius: 20px;
+    color: white;
+    font-size: 1.4rem;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    text-decoration: none;
+    transition: 0.4s;
+  }
+
+  .card:hover {
+    transform: translateY(-10px) scale(1.03);
+  }
+
+  .icon { font-size: 4rem; }
+
+  .leaf { background: var(--leaf-grad); }
+  .soil { background: var(--soil-grad); }
+  .climate { background: var(--clim-grad); }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h1>🌿 Smart Agriculture AI</h1>
+  <div class="subtitle">Deep Learning Based Crop Intelligence System</div>
+
+  <div class="cards">
+    <a href="/leaf" class="card leaf">
+      <div class="icon">🌱</div>
+      Leaf Disease
+    </a>
+
+   
+
+    <a href="/climate" class="card climate">
+      <div class="icon">🌤️</div>
+      Climate Advisory
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

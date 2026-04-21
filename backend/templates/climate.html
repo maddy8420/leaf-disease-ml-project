@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Crop Guide System</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  background: #f4f6f7;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  width: 900px;
+  margin-top: 40px;
+}
+
+select {
+  width: 70%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 12px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.card {
+  margin-top: 20px;
+  padding: 20px;
+  background: white;
+  border-radius: 10px;
+  line-height: 1.6;
+}
+
+.info {
+  color: gray;
+  font-size: 13px;
+}
+
+.chat-box {
+  margin-top: 20px;
+  height: 250px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.user { text-align: right; }
+.bot { color: green; }
+
+.chat-input {
+  display: flex;
+  margin-top: 10px;
+}
+
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+}
+
+.chat-input button {
+  margin-left: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Crop Guide 🌱</h2>
+
+<select id="cropDropdown"></select>
+<button onclick="getCropInfo()">Search</button>
+
+<div id="result"></div>
+
+<!-- CHAT -->
+<div id="chatBox" class="chat-box"></div>
+
+<div class="chat-input">
+<input id="chatInput" placeholder="Ask doubts...">
+<button onclick="sendMessage()">Send</button>
+</div>
+
+</div>
+
+<script>
+
+let currentCrop = null;
+
+// ================= LOAD CROPS =================
+window.onload = function () {
+  fetch("/api/crops")
+    .then(res => res.json())
+    .then(data => {
+      const dropdown = document.getElementById("cropDropdown");
+
+      data.crops.forEach(crop => {
+        const option = document.createElement("option");
+        option.value = crop.toLowerCase();
+        option.textContent = crop;
+        dropdown.appendChild(option);
+      });
+    });
+};
+
+// ================= GET CROP INFO =================
+function getCropInfo(){
+
+  const crop = document.getElementById("cropDropdown").value;
+  const result = document.getElementById("result");
+  const chat = document.getElementById("chatBox");
+
+  chat.innerHTML = "";
+  currentCrop = crop;
+
+  result.innerHTML = "Loading...";
+
+  fetch("/api/crop-info", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({crop: crop})
+  })
+  .then(res => res.json())
+  .then(data => {
+
+    if(data.error){
+      result.innerHTML = "❌ Crop not found";
+      return;
+    }
+
+    result.innerHTML = `
+      <div class="card">
+        <h3>${data.crop}</h3>
+
+        <p><b>Nitrogen (N):</b> ${formatRange(data.N, "kg/ha")}</p>
+        <p><b>Phosphorus (P):</b> ${formatRange(data.P, "kg/ha")}</p>
+        <p><b>Potassium (K):</b> ${formatRange(data.K, "kg/ha")}</p>
+
+        <p><b>Temperature:</b> ${formatRange(data.temperature, "°C")}</p>
+        <p><b>Humidity:</b> ${formatRange(data.humidity, "%")}</p>
+        <p><b>Soil pH:</b> ${data.ph}</p>
+        <p><b>Water Required:</b> ${formatRange(data.water, "mm/season")}</p>
+
+        <p class="info">
+          Ideal conditions for high yield.
+        </p>
+      </div>
+    `;
+
+    // AUTO CHAT
+    sendAuto("Explain ideal conditions for this crop");
+
+  })
+  .catch(err => {
+    result.innerHTML = "Error loading data";
+    console.error(err);
+  });
+}
+
+// ================= CHAT =================
+function sendMessage(){
+  const msg = chatInput.value;
+  if(!msg) return;
+  chatInput.value="";
+  fetchChat(msg,true);
+}
+
+function sendAuto(msg){
+  fetchChat(msg,false);
+}
+
+function fetchChat(message, showUser){
+
+  const chat = document.getElementById("chatBox");
+
+  if(showUser){
+    chat.innerHTML += `<div class="user">You: ${message}</div>`;
+  }
+
+  chat.innerHTML += `<div class="bot">AI: ⏳ Thinking...</div>`;
+
+  fetch("/api/chat", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({
+      message: message,
+      crop: currentCrop
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    chat.lastChild.remove();
+    chat.innerHTML += `<div class="bot">AI: ${data.response}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+  });
+}
+
+// ================= FORMAT FUNCTION =================
+function formatRange(value, unit) {
+  if (!value) return "-";
+
+  const parts = value.split("-").map(v => v.trim());
+
+  if (parts.length === 2) {
+    const min = parseFloat(parts[0]);
+    const max = parseFloat(parts[1]);
+
+    if (min === max) {
+      return `${min} ${unit}`;
+    }
+
+    return `${min} – ${max} ${unit}`;
+  }
+
+  return value + " " + unit;
+}
+
+</script>
+
+</body>
+</html>
