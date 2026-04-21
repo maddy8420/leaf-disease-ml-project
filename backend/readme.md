@@ -103,7 +103,7 @@ backend/
 
 ```bash
 git clone https://github.com/maddy8420/leaf-disease-ml-project.git
-cd leaf-disease-detection/backend
+cd leaf-disease-ml-project/backend
 ```
 
 ### 2. Create Virtual Environment
