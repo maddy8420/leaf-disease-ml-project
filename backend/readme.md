@@ -58,18 +58,18 @@ backend/
 ├── app.py                
 ├── app_vit.py              
 ├── train_cnn.py
-├── tarin_crop_model.py 
+├── train_crop_model.py 
 ├── config.py                
 ├── requirements.txt
 │
 ├── data/
-│   ├── diseases.json     
-│ 
-│
+│   ├── diseases.json
+├── dataset/
+│   ├── place the datasets here 
 ├── models/
 │   ├── disease_cnn_model.h5     
 │   └── vit_model.h5      
-│   └── disease_classes     
+│   └── disease_classes.txt     
 ├── services/
 │   ├── chatbot_service.py         
 │   ├── disease_service.py          
@@ -84,7 +84,11 @@ backend/
 
     
 ```
+---
+## 📊 Dataset
 
+- Plant Disease Dataset: https://www.kaggle.com/datasets/emmarex/plantdisease  
+- Crop Recommendation Dataset: https://data.mendeley.com/datasets/vynxnppr7j/1
 ---
 
 ##  Setup & Installation
@@ -98,7 +102,7 @@ backend/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/<your-username>/leaf-disease-detection.git
+git clone https://github.com/maddy8420/leaf-disease-ml-project.git
 cd leaf-disease-detection/backend
 ```
 
@@ -157,18 +161,13 @@ Access the web interface at `http://localhost:5000`
 
 ##  Model Weights
 
-Pre-trained weights are not included in this repository. To obtain them:
-
-1. **Retrain** using the provided dataset structure and `config.py` hyperparameters
-2. Or **contact the author** for direct access to trained `.h5` files
-
+Pre-trained weights are not included in this repository.
 ---
 
 ##  Author
 
 **Madhu Sudhan**
--  Madhu Suhan (madhusudhancbtech24@rvu.edu.in)
--  [LinkedIn / GitHub]
+-  Madhu Sudhan (madhusudan0804.03@gmail.com)
 
 
 ##  Conclusion
